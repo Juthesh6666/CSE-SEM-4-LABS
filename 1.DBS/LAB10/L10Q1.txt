@@ -1,0 +1,10 @@
+create or replace procedure disp is
+begin
+     dbms_output.put_line('NAMASKARA!');
+end;
+/
+
+begin
+    disp;
+end;
+/

@@ -1,0 +1,28 @@
+create or replace procedure disp(d_name varchar) is
+
+    CURSOR C1(d instructor.dept_name%TYPE) is
+	select ID,name 
+	from instructor 
+	where dept_name = d;
+    CURSOR C2(d course.dept_name%TYPE) is 
+	select course_id, title 
+	from course 
+	where dept_name = d;
+begin
+    dbms_output.put_line('Instructor ID    Instructor Name');
+    for I IN C1(d_name)
+    loop
+        dbms_output.put_line(I.ID || ' ' || I.name);
+    end loop;
+    dbms_output.put_line('Course ID    Course Title');
+    for I in C2(d_name)
+    loop
+        dbms_output.put_line(I.course_id || ' ' || I.title);
+    end loop;
+end;
+/
+
+begin
+    disp('&deptName');
+end;
+/

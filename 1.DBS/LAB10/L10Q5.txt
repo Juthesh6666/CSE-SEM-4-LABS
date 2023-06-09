@@ -1,0 +1,11 @@
+create or replace function square(n integer)
+return integer as
+begin
+    return n * n;
+end;
+/
+
+begin
+     dbms_output.put_line(square('&number'));
+end;
+/

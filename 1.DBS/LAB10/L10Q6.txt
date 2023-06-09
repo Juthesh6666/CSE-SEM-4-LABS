@@ -1,0 +1,32 @@
+create or replace procedure disp(d_name varchar) is
+      
+        CURSOR C(d instructor.dept_name%TYPE) is 
+	select salary,name 
+	from instructor 
+	where dept_name = d;
+	  instrName instructor.name%TYPE;
+           m integer;
+begin
+	m:= -1;
+	for I in C(d_name)
+	loop
+	   if I.salary > m then
+		instrName := I.name;
+	   end if;
+	end loop;
+	 dbms_output.put_line('Highest paid instructor of ' || d_name || ' is ' || instrName);
+end;
+/
+
+declare
+	CURSOR C is 
+	select distinct dept_name 
+	from instructor;
+		
+begin
+     for I in C
+     loop
+	 disp(I.dept_name);
+	end loop;
+end;
+/

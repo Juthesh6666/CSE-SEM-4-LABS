@@ -1,0 +1,102 @@
+1.select course_id,
+count(ID) from takes natural join course 
+group by course_id;
+
+2.select dept_name,
+count(distinct ID) from takes natural join course 
+group by dept_name 
+having count(distinct ID)>10;
+
+3.select dept_name,
+count(course_id) from course 
+group by dept_name;
+
+4.select dept_name,
+avg(salary) from instructor 
+group by dept_name having avg(salary)>42000;
+
+5.select course_id,sec_id,
+count(ID) from section natural join takes 
+where semester='Spring' and year=2009 
+group by course_id,sec_id;
+
+6.select *from prereq order by course_id asc;
+
+7.select *from instructor order by salary desc;
+
+8.select max(sal_sum)
+from
+(select sum(salary) sal_sum
+from instructor
+group by dept_name);
+
+9.select avg_sal
+from
+(select avg(salary) avg_sal,
+dept_name from instructor
+group by dept_name
+having avg(salary)>42000);
+
+10.select max(enrol)
+from
+(select course_id,sec_id,
+count(ID) enrol from section natural join takes
+where semester='Spring' and year=2010 
+group by course_id,sec_id);
+
+11.select distinct name from teaches,instructor 
+where teaches.id = instructor.id and course_id 
+in (select distinct course_id 
+from takes,student
+ where dept_name='Comp. Sci.'
+and student.id = takes.id);
+
+12.select sal_avg 
+from(select avg(salary) sal_avg 
+from instructor group by dept_name 
+having avg(salary)>50000 
+and count(distinct id)>5);
+
+13.with max_bud(maxbud) as 
+(select max(budget) maxbud 
+from department) 
+select budget from department,
+max_bud where budget=maxbud;
+
+14.with tot_sal(dept_name,tot) as 
+(select dept_name,sum(salary) tot 
+from instructor group by dept_name) , 
+avg_tot_sal(avgtotsal) as 
+(select avg(tot) from tot_sal) 
+select dept_name,
+tot from tot_sal,avg_tot_sal 
+where tot>avgtotsal;
+
+15.with en_count(sec_id,encount) as 
+(select sec_id,count(ID) enrol 
+from section natural join takes 
+where semester='Fall' and year=2009 
+group by sec_id) 
+select sec_id,max(encount) 
+from en_count group by sec_id;
+
+16.with Fin_TotCred(totcred) as 
+(select tot_cred from student 
+where dept_name='Finance') 
+select dept_name,
+sum(tot_cred) from student,
+Fin_TotCred group by dept_name 
+having sum(tot_cred)>max(totcred);
+
+17.delete from instructor where dept_name = 'Finance';
+
+18.delete from course where dept_name='Comp. Sci.';
+
+19.update student set dept_name ='IT' where dept_name = 'Comp. Sci';
+
+20.update instructor set salary=salary*1.03 where salary>100000;
+update instructor set salary=salary*1.05 where salary<=100000;
+
+21.insert into student select ID,name,dept_name,0 from instructor;
+
+22.delete from instructor where salary < (select avg(salary) from instructor);

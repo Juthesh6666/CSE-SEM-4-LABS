@@ -1,0 +1,238 @@
+create table StudentTable(
+RollNo number(5),
+GPA numeric(2,1)
+);
+
+insert into StudentTable values(1,5.8);
+insert into StudentTable values(2,6.5);
+insert into StudentTable values(3,3.4);
+insert into StudentTable values(4,7.8);
+insert into StudentTable values(5,9.5);
+
+
+1.set serveroutput on
+declare
+pl_rollno StudentTable.gpa%TYPE;
+pl_row StudentTable%ROWTYPE;
+begin
+pl_rollno := &RollNum;
+
+select * into pl_row
+from StudentTable
+where rollno=pl_rollno;
+
+dbms_output.put_line('The Details for '||pl_row.rollno||' are '||pl_row.gpa);
+end;
+/
+
+2.set serveroutput on
+declare
+grade char(2);
+pl_gpa StudentTable.gpa%TYPE;
+begin
+
+pl_gpa :=&gpa;
+
+   if pl_gpa>=0 and pl_gpa<4 then grade :='F';
+elsif pl_gpa>=4 and pl_gpa<5 then grade :='E';
+elsif pl_gpa>=5 and pl_gpa<6 then grade :='D';
+elsif pl_gpa>=6 and pl_gpa<7 then grade :='C';
+elsif pl_gpa>=7 and pl_gpa<8 then grade :='B';
+elsif pl_gpa>=8 and pl_gpa<9 then grade :='A';
+else                              grade :='A+';
+end if;
+dbms_output.put_line('Grade for '||pl_gpa||' is '||grade);
+end;
+/
+
+3.set serveroutput on
+declare
+issue_d date;
+return_d date;
+days number(10);
+fine number(10);
+begin
+
+issue_d :=TO_DATE('&DateOfIssue','DD-MM-YY');
+return_d :=TO_DATE('&DateOfReturn','DD-MM-YY');
+days := return_d-issue_d;
+
+   if days>=0  and days<=7   then fine := 0;
+elsif days>=7  and days<=15  then fine := days*1;
+elsif days>=16 and days<=30  then fine := days*2;
+else                              fine := days*5;
+end if;
+
+dbms_output.put_line('Fine is '||fine);
+
+end;
+/
+
+4.set serveroutput on
+declare
+grade char(2);
+x number := 0;
+pl_gpa StudentTable.gpa%TYPE;
+begin
+
+loop
+
+x := x+1;
+
+if x > 5 then exit;
+end if;
+
+select gpa into pl_gpa
+from StudentTable
+where rollno=x;
+
+   if pl_gpa>=0 and pl_gpa<4 then grade :='F';
+elsif pl_gpa>=4 and pl_gpa<5 then grade :='E';
+elsif pl_gpa>=5 and pl_gpa<6 then grade :='D';
+elsif pl_gpa>=6 and pl_gpa<7 then grade :='C';
+elsif pl_gpa>=7 and pl_gpa<8 then grade :='B';
+elsif pl_gpa>=8 and pl_gpa<9 then grade :='A';
+else                              grade :='A+';
+end if;
+
+dbms_output.put_line('Grade for '||pl_gpa||' is '||grade);
+
+
+end loop;
+end;
+/
+
+5.alter table StudentTable ADD LetterGrade varchar2(2);
+
+set serveroutput on
+declare
+grade char(2);
+x number := 0;
+pl_row StudentTable%ROWTYPE;
+begin
+
+loop
+
+x := x+1;
+
+if x > 5 then exit;
+end if;
+
+select * into pl_row
+from StudentTable
+where rollno=x;
+
+if pl_row.gpa>=0 and pl_row.gpa<4 then grade :='F';
+elsif pl_row.gpa>=4 and pl_row.gpa<5 then grade :='E';
+elsif pl_row.gpa>=5 and pl_row.gpa<6 then grade :='D';
+elsif pl_row.gpa>=6 and pl_row.gpa<7 then grade :='C';
+elsif pl_row.gpa>=7 and pl_row.gpa<8 then grade :='B';
+elsif pl_row.gpa>=8 and pl_row.gpa<9 then grade :='A';
+else grade :='A+';
+end if;
+
+update StudentTable
+set LetterGrade = grade
+where rollno = x;
+
+dbms_output.put_line('Grade for '||pl_row.gpa||' is '||grade);
+
+end loop;
+end;
+/
+
+
+6.set serveroutput on
+declare
+pl_row StudentTable%ROWTYPE;
+x number := 1;
+maxgpa StudentTable.gpa%TYPE;
+begin
+
+select gpa into maxgpa
+from StudentTable
+where rollno=x;
+
+loop
+
+x := x+1;
+
+if x>5 then exit;
+end if;
+
+select * into pl_row
+from StudentTable
+where rollno=x;
+
+if pl_row.gpa > maxgpa then maxgpa := pl_row.gpa;
+end if;
+
+end loop;
+
+select * into pl_row
+from StudentTable
+where gpa=maxgpa;
+
+dbms_output.put_line('Max GPA is '||pl_row.gpa||' for RollNo '||pl_row.rollno);
+
+end;
+/
+
+7.set serveroutput on
+declare
+grade char(2);
+x number := 0;
+pl_gpa StudentTable.gpa%TYPE;
+begin
+<<back>>
+
+x := x+1;
+
+select gpa into pl_gpa
+from StudentTable
+where rollno=x;
+
+   if pl_gpa>=0 and pl_gpa<4 then grade :='F';
+elsif pl_gpa>=4 and pl_gpa<5 then grade :='E';
+elsif pl_gpa>=5 and pl_gpa<6 then grade :='D';
+elsif pl_gpa>=6 and pl_gpa<7 then grade :='C';
+elsif pl_gpa>=7 and pl_gpa<8 then grade :='B';
+elsif pl_gpa>=8 and pl_gpa<9 then grade :='A';
+else                              grade :='A+';
+end if;
+
+goto print;
+
+<<print>>
+dbms_output.put_line('Grade for '||pl_gpa||' is '||grade);
+if x<5 then goto back;
+end if;
+
+end;
+/
+
+8.
+
+9.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

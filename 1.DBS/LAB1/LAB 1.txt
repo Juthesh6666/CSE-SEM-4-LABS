@@ -1,0 +1,27 @@
+1.create table EMPLOYEE (
+emp_no number(10),
+emp_name varchar(10),
+emp_address varchar(10));
+
+2. insert into EMPLOYEE values (101,'PRASAD','MANIPAL');
+insert into EMPLOYEE values (102,'ANAND','MANIPAL');
+insert into EMPLOYEE values (101,'RAVI','MANIPAL');
+insert into EMPLOYEE values (101,'SUBHAKAR','MANIPAL');
+insert into EMPLOYEE values (101,'JOGI','MANIPAL');
+
+3. select *from EMPLOYEE;
+
+4. select *from EMPLOYEE 
+where (emp_address='MANIPAL');
+
+5. alter table EMPLOYEE ADD (salary numeric(10));
+
+6. update EMPLOYEE set salary=100000;
+
+7.desc employee;
+
+8.Delete from EMPLOYEE where emp_address=MANGALORE;
+
+9. Rename EMPLOYEE to EMPLOYEE1;
+
+10. drop table EMPLOYEE1;

@@ -1,0 +1,131 @@
+1.(select course_id,
+title from course natural join section 
+where semester='Fall' and year=2009)
+union all
+(select course_id,
+title from course natural join section 
+where semester='Spring' and year=2010);
+
+
+2.(select course_id,
+title from course natural join section 
+where semester='Fall' and year=2009)
+intersect
+(select course_id,
+title from course natural join section 
+where semester='Spring' and year=2010);
+
+
+3.(select course_id,
+title from course natural join section 
+where semester='Fall' and year=2009)
+minus
+(select course_id,
+title from course natural join section 
+where semester='Spring' and year=2010);
+
+
+4.(select course_id from course)
+minus
+(select course_id from takes);
+
+
+5.select course_id,
+title from course natural join section
+where semester='Fall' and year=2009
+and course_id in
+(select course_id
+from course natural join section 
+where semester='Spring' and year=2010);
+
+
+6.select count(distinct id) total 
+from takes t 
+where course_id in 
+(select course_id 
+from teaches 
+where id=10101);
+
+7.select course_id,
+title from course natural join section 
+where semester='Fall' and year=2009 
+and course_id not in
+(select course_id 
+from course natural join section 
+where semester='Spring' and year=2010);
+
+
+8.select name 
+from student 
+where name in 
+(select name 
+from instructor);
+
+9.select name,dept_name 
+from instructor
+ where salary > some 
+(select salary 
+from instructor
+where dept_name='Biology');
+
+10.select name,dept_name 
+from instructor 
+where salary > all 
+(select salary 
+from instructor 
+where dept_name='Biology');
+
+11.select dept_name,avg(salary) Avg_Sal 
+from instructor group by dept_name having avg(salary) >= all 
+(select avg(salary) 
+from instructor group by dept_name);
+
+12.select dept_name from department 
+where budget < all (select avg(salary) 
+from instructor);
+
+13.select c.course_id,c.title 
+from course c,section s 
+where c.course_id=s.course_id 
+and s.semester='Fall' and s.year=2009 
+and exists
+(select * from section s 
+where c.course_id=s.course_id 
+and s.semester='Spring' and s.year=2010);
+
+14.select s.name from student 
+s where exists
+(select * from takes t 
+where s.id=t.id 
+and s.dept_name='Biology');
+
+15.select unique course_id 
+from course c 
+where 1>=(select count(course_id) 
+from section s 
+where c.course_id=s.course_id 
+and year=2009 group by course_id);
+
+16.select name,dept_name 
+from student s 
+where 2<=(select count(id) from takes t 
+where s.id=t.id and s.dept_name='Comp. Sci.' 
+group by id);
+
+17.select dept_name,AVG_SAL 
+from (select dept_name,avg(salary) AVG_SAL 
+from instructor 
+group by dept_name 
+having avg(salary)>42000);
+
+18.create view Phy_Dept as select building,room_number 
+from section natural join course
+ where dept_name='Physics' 
+and semester='Fall' and year=2009;
+
+19. select * from Phy_Dept; 
+
+20. create view dept_tot_sal as select dept_name,
+sum(salary) tot_salary
+from instructor group by dept_name; 
+select * from dept_tot_sal;

@@ -1,0 +1,74 @@
+1.create table EMPLOYEE1(
+EmpNo number(5) primary key,
+EmpName varchar(20) not null,
+Gender varchar(1) not null,
+Salary number(10) not null,
+Address varchar(20) not null
+);
+
+alter table EMPLOYEE1 add (DNo number(5));
+alter table EMPLOYEE1 add check(Gender in ('M','F'));
+
+2.create table department(
+DeptNo number(5) primary key,
+DeptName varchar(15) unique not null
+);
+
+3.alter table EMPLOYEE1 add constraint FK_DNo foreign key(DNo) references department(DeptNo);
+
+4.insert into department values(1,'Account','Banglore');
+insert into department values(2,'Production','Manipal');
+insert into department values(3,'Marketing','Coimbatore');
+insert into department values(4,'Branch','Mangalore');
+insert into department values(5,'Management','Mumbai');
+
+insert into EMPLOYEE1 values(1,'juthesh','M',100000,'banglore',1);
+insert into EMPLOYEE1 values(2,'rahul','M',90000,'manglore',2);
+insert into EMPLOYEE1 values(3,'manoj','M',80000,'delhi',3);
+insert into EMPLOYEE1 values(4,'praneeth','M',70000,'mumbai',4);
+insert into EMPLOYEE1 values(5,'anand','M',60000,'hyderbad',5);
+
+5.insert into department values(5,'Research','Hyderabad');
+
+6.delete from department where DeptNo=5;
+
+7.alter table employee drop constraint FK_DNo;
+alter table employee add constraint FK_DNo foreign key(DNo) references department(DeptNo) on delete cascade;
+
+8.alter table employee modify (constraint DEF_SALARY Salary default 10000);
+
+9.select name,dept_name from student;
+
+10.select * from instructor where dept_name='Comp. Sci.';
+
+11.select title from course where dept_name='Comp. Sci.' and credits=3;
+
+12.select course_id,title from takes natural join course where id=12345;
+
+13.select * from instructor where salary between 40000 and 90000;
+
+14.select id from instructor where id not in (select distinct id from teaches);
+
+15.select s.name,c.title,sec.year from student s , course c,section sec where sec.room_number=303;
+
+16.select s.name,t.course_id,c.title c_name from student s,course c,takes t where t.id=s.id and c.course_id=t.course_id and t.year=2015;
+
+select s.name,t.course_id,c.title c_name from student s,course c,takes t where t.id=s.id and c.course_id=t.course_id and t.year=2009;
+
+17.select name,salary inst_salary from instructor where salary >( select min(salary) from instructor where dept_name='Comp. Sci.');
+
+18.select name,dept_name from instructor where dept_name like '%ch%';
+
+19.select name,length(name) name_length from student;
+
+20.select dept_name,substr(dept_name,3,3) char_3 from department; 
+
+21.select upper(name) from instructor;
+
+22.update department set budget=10000 where budget=NULL;
+
+23.select salary,round(salary/3,-2) rounded from instructor;
+
+24.
+
+25.
