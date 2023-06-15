@@ -1,25 +1,28 @@
-//program to switch on LEDs
+//up & down counter with switch
 #include <LPC17xx.h>
-unsigned int i,j;
-unsigned long LED;
 int main(void){
-	SystemInit();	//add these two function for is internal operation
-	SystemCoreClockUpdate();
-	LPC_PINCON->PINSEL0 &= 0xFF0000FF;	//configure Port0 PINS P0.4-P0.11 as GPIO function
-	LPC_GPIO0->FIODIR |= 0x00000FF0;	 	//configure P0.4-P0.11 as output port
+	unsigned int j;
+	unsigned long LED;
+	
+	//configure Port0 PINS P0.4-P0.11 as GPIO function
+	LPC_PINCON->PINSEL0 &= 0xFF0000FF;
+	//configure P0.4-P0.11 as output port
+	LPC_GPIO0->FIODIR |= 0x00000FF0;
+	
+	LPC_PINCON->PINSEL4 &= 0XFCFFFFFF;
+	LPC_GPIO2->FIODIR &= 0xFFFFEFFF;	//P2.12 as input port
+	
 	while(1){
-		LED=0x00000010;					//initial value on LED
-		for (i=1;;i<9;i++){				//on the LEDs serially
-			LPC_GPIO0->FIOSET=LED;		//turn on LED at LSB(LED connected to P0.4)
-		
-			for ((j=0;j<10000;j++);		//a random delay
-			LED<<=1;					//shift the LED to the left by one unit
-		}								//loop for 8 times
-		LED = 0x00000010;
-		for(i=1;i<9;i++){				//off the LEDs serially
-			LPC_GPIO0->FIOCLR = LED;	//turn off LED at LSB(LED connected to P0.4)
-			for(j=0;j<10000;j++);
-			LED <<= 1;
+		if (LPC_GPIO2->FIOPIN & 1<<12){	//switch not pressed
+			for(LED=255;LED>=0;LED--){	//down counter
+				LPC_GPIO0->FIOPIN = LED<<4;
+				for(j=0;j<10000;j++);    //a random delay
+			} //loop for 255 times
+		} else{
+			for(LED=0;LED<256;LED++){	 //up counter
+				LPC_GPIO0->FIOPIN = LED<<4;
+				for(j=0;j<10000;j++);    //a random delay
+			} //loop for 255 times	
 		}
 	}
-}		
+}
